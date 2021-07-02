@@ -11,3 +11,5 @@ https://kivymd.readthedocs.io/en/latest/getting-started/#
 
 Автокомпиляция APK:
 https://www.youtube.com/watch?v=fmkX_3ynHsc&t=51s
+Добавляем buildozer.spec, buildozer-32bit.spec 
+и buildozer-64bit.spec 
