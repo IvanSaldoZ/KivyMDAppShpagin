@@ -9,9 +9,16 @@ from kivymd.theming import ThemableBehavior
 from kivymd.uix.list import OneLineIconListItem, MDList
 from kivymd.icon_definitions import md_icons
 
+from kivymd.uix.menu import MDDropdownMenu
+
 from kivymd.font_definitions import fonts
 
 KV = '''
+#https://stackoverflow.com/questions/65698145/kivymd-tab-name-containing-icons-and-text
+# this import will prevent disappear tabs through some clicks on them)))
+#:import md_icons kivymd.icon_definitions.md_icons
+#:import fonts kivymd.font_definitions.fonts
+
 # Menu item in the DrawerList list.
 <ItemDrawer>:
     theme_text_color: "Custom"
@@ -82,7 +89,125 @@ Screen:
                         on_tab_switch: app.on_tab_switch(*args)      
                         height: "48dp"
                         tab_indicator_anim: False
-                        background_color: 0.1, 0.1, 0.1, 1                                                          
+                        background_color: 0.1, 0.1, 0.1, 1       
+                        
+                        
+                        Tab:
+                            id: tab1
+                            name: 'tab1'
+                            text: f"[size=20][font={fonts[-1]['fn_regular']}]{md_icons['calculator-variant']}[/size][/font] Input"
+                            
+                            BoxLayout:
+                                orientation: 'vertical'
+                                padding: "10dp"   
+                                
+                                BoxLayout:
+                                    orientation: 'horizontal'                               
+                                    
+                                    MDIconButton:
+                                        icon: "calendar-month"
+                                        
+                                    MDTextField:
+                                        id: start_date
+                                        hint_text: "Start date"
+                                        on_focus: if self.focus: app.date_dialog.open()
+                                
+                                BoxLayout:
+                                    orientation: 'horizontal'                         
+                                    
+                                    MDIconButton:
+                                        icon: "cash"
+                                        
+                                    MDTextField:
+                                        id: loan
+                                        hint_text: "Loan"
+                                    
+                                BoxLayout:
+                                    orientation: 'horizontal'                                
+                                    
+                                    MDIconButton:
+                                        icon: "clock-time-five-outline"
+                                            
+                                    MDTextField:
+                                        id: months
+                                        hint_text: "Months"
+                                    
+                                BoxLayout:
+                                    orientation: 'horizontal'                                 
+                                    
+                                    MDIconButton:
+                                        icon: "bank"
+                                            
+                                    MDTextField:
+                                        id: interest
+                                        hint_text: "Interest, %"
+                                    
+                                    MDTextField:
+                                        id: payment_type
+                                        hint_text: "Payment type"
+                                        on_focus: if self.focus: app.menu.open()
+                                
+                                MDSeparator:
+                                    height: "1dp"
+                                    
+                                
+                                BoxLayout:
+                                    orientation: 'horizontal'
+                                    
+                                    AnchorLayout:
+                                        anchor_x: 'center'
+                                
+                                        MDRectangleFlatIconButton:
+                                            icon: "android"
+                                            text: "BUTTON1"
+                                            theme_text_color: "Custom"
+                                            text_color: 1, 1, 1, 1
+                                            line_color: 0, 0, 0, 1
+                                            icon_color: 1, 0, 0, 1
+                                            md_bg_color: 0.1, 0.1, 0.1, 1
+                                            adaptive_width: True
+                                            on_release: app.calc_table(*args)
+                                    
+                                    AnchorLayout:
+                                        anchor_x: 'center'
+                                    
+                                        MDRectangleFlatIconButton:
+                                            icon: "android"
+                                            text: "BUTTON2"
+                                            theme_text_color: "Custom"
+                                            text_color: 1, 1, 1, 1
+                                            line_color: 0, 0, 0, 1
+                                            icon_color: 1, 0, 0, 1
+                                            md_bg_color: 0.1, 0.1, 0.1, 1
+                                    
+                                    AnchorLayout:
+                                        anchor_x: 'center'
+                                        
+                                        Button:
+                                            text: "Test Ok"
+                                            size_hint_y: .5
+                                            background_color: (0.1, 0.1, 0.1, 1.0)
+                                                                           
+                        Tab:
+                            id: tab2
+                            name: 'tab2'
+                            text: f"[size=20][font={fonts[-1]['fn_regular']}]{md_icons['table-large']}[/size][/font] Table"
+                            
+
+                        Tab:
+                            id: tab3
+                            name: 'tab3'
+                            text: f"[size=20][font={fonts[-1]['fn_regular']}]{md_icons['chart-areaspline']}[/size][/font] Graph"
+                        
+                        Tab:
+                            id: tab4
+                            name: 'tab4'
+                            text: f"[size=20][font={fonts[-1]['fn_regular']}]{md_icons['chart-pie']}[/size][/font] Chart"
+                        
+                        Tab:
+                            id: tab5
+                            name: 'tab5'
+                            text: f"[size=20][font={fonts[-1]['fn_regular']}]{md_icons['book-open-variant']}[/size][/font] Sum"
 
 
         MDNavigationDrawer:
@@ -158,14 +283,12 @@ class MortgageCalculatorApp(MDApp):
             self.root.ids.content_drawer.ids.md_list.add_widget(
                 ItemDrawer(icon=icon_name, text=icons_item_menu_lines[icon_name])
             )
-        # for name_tab in list(md_icons.keys())[15:30]:
-        #     self.root.ids.tabs.add_widget(Tab(icon=name_tab, title=name_tab))
 
-        # Закладки в центре
-        for icon_name, name_tab in icons_item_menu_tabs.items():
-            self.root.ids.tabs.add_widget(
-                Tab(text=f"[ref={name_tab}][font={fonts[-1]['fn_regular']}]{md_icons[icon_name]}[/font][/ref] {name_tab}")
-            )
+        # Закладки в центре можно формировать программным образом, а не через KV-файла
+        # for icon_name, name_tab in icons_item_menu_tabs.items():
+        #     self.root.ids.tabs.add_widget(
+        #         Tab(text=f"[ref={name_tab}][font={fonts[-1]['fn_regular']}]{md_icons[icon_name]}[/font][/ref] {name_tab}")
+        #     )
 
     def on_tab_switch(
             self, instance_tabs, instance_tab, instance_tab_label, tab_text
