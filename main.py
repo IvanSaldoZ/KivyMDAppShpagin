@@ -228,6 +228,36 @@ Screen:
 
             ContentNavigationDrawer:
                 id: content_drawer
+                
+<ItemTable>:
+    size_hint_y: None
+    height: "42dp"
+
+    canvas:
+        Color:
+            rgba: root.color
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+    MDLabel:
+        text: root.num
+        halign: "center"
+    MDLabel:
+        text: root.date
+        halign: "center"
+    MDLabel:
+        text: root.payment
+        halign: "center"
+    MDLabel:
+        text: root.interest
+        halign: "center"
+    MDLabel:
+        text: root.principal
+        halign: "center"
+    MDLabel:
+        text: root.debt
+        halign: "center"
 '''
 
 
