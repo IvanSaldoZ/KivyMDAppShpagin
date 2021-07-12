@@ -130,24 +130,33 @@ class MortgageCalculatorApp(MDApp):
         Метод при создании приложения
         :return:
         """
-        icons_item = {
-            "folder": "My files",
-            "account-multiple": "Shared with me",
-            "star": "Starred",
-            "history": "Recent",
-            "checkbox-marked": "Shared with me",
-            "upload": "Upload",
+        # Иконки слева
+        icons_item_menu_lines = {
+            "account-cowboy-hat": "About author",
+            "youtube": "My YouTube",
+            "coffee": "Donate author",
+            "github": "Source code",
+            "share-variant": "Share app",  #air-horn
+            "shield-sun": "Dark/Light",
+        }
+        # Иконки закладок
+        icons_item_menu_tabs = {
+            "calculator-variant": "Input",  #ab-testing
+            "table-large": "Table",
+            "chart-areaspline": "Graph",
+            "chart-pie": "Chart",  # chart-arc
+            "book-open-variant": "Sum",
         }
         # Левое меню
-        for icon_name in icons_item.keys():
+        for icon_name in icons_item_menu_lines.keys():
             self.root.ids.content_drawer.ids.md_list.add_widget(
-                ItemDrawer(icon=icon_name, text=icons_item[icon_name])
+                ItemDrawer(icon=icon_name, text=icons_item_menu_lines[icon_name])
             )
         # for name_tab in list(md_icons.keys())[15:30]:
         #     self.root.ids.tabs.add_widget(Tab(icon=name_tab, title=name_tab))
 
         # Закладки в центре
-        for icon_name, name_tab in icons_item.items():
+        for icon_name, name_tab in icons_item_menu_tabs.items():
             self.root.ids.tabs.add_widget(
                 Tab(text=f"[ref={name_tab}][font={fonts[-1]['fn_regular']}]{md_icons[icon_name]}[/font][/ref] {name_tab}")
             )
