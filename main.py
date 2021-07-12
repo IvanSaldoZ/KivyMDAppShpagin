@@ -74,6 +74,8 @@ Screen:
                         title: app.title
                         elevation: 10
                         left_action_items: [['menu', lambda x: nav_drawer.set_state("open")]]
+                        right_action_items: [["star-outline", lambda x: app.on_star_click()]]
+                        md_bg_color: 0, 0, 0, 1
                         
                     MDTabs:
                         id: tabs
@@ -178,7 +180,12 @@ class MortgageCalculatorApp(MDApp):
 
         print('Tab clicked!!!', tab_text)
 
-
+    def on_star_click(self):
+        """
+        При нажатии на звёздочку сверху справа
+        :return:
+        """
+        print("star clicked!")
 
 
 class Tab(MDFloatLayout, MDTabsBase):
