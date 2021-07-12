@@ -14,6 +14,10 @@ from kivy.clock import Clock
 
 from kivymd.font_definitions import fonts
 
+from kivymd.uix.picker import MDDatePicker
+import datetime
+import calendar
+
 KV = '''
 #https://stackoverflow.com/questions/65698145/kivymd-tab-name-containing-icons-and-text
 # this import will prevent disappear tabs through some clicks on them)))
@@ -275,6 +279,13 @@ class MortgageCalculator(MDApp):
         # Связываем событие нажатия на меню выбора типа платежа с определенным методом класса
         self.menu.bind(on_release=self.set_item)
 
+        # Выбор даты
+        #https://kivymd.readthedocs.io/en/latest/components/pickers/?highlight=date%20picker#
+        self.date_dialog = MDDatePicker(
+            callback=self.get_date,
+            background_color=(0.1, 0.1, 0.1, 1.0),
+        )
+
     def set_item(self, instance_menu, instance_menu_item):
         """
         Назначаем текст после выбора меню выбора типа платежа: аннуитентный или обычный
@@ -301,9 +312,16 @@ class MortgageCalculator(MDApp):
 
     def on_start(self):
         """
-        Метод при создании приложения
+        Метод. который вызывается при создании приложения
         :return:
         """
+        # Первоначальное заполнение параметров
+        self.screen.ids.start_date.text = datetime.date.today().strftime("%d-%m-%Y")
+        self.screen.ids.loan.text = "5000000"
+        self.screen.ids.months.text = "120"
+        self.screen.ids.interest.text = "9.5"
+        self.screen.ids.payment_type.text = "annuity"
+
         # Иконки слева
         icons_item_menu_lines = {
             "account-cowboy-hat": "About author",
@@ -332,6 +350,15 @@ class MortgageCalculator(MDApp):
         #     self.root.ids.tabs.add_widget(
         #         Tab(text=f"[ref={name_tab}][font={fonts[-1]['fn_regular']}]{md_icons[icon_name]}[/font][/ref] {name_tab}")
         #     )
+
+
+    def get_date(self, date):
+        '''
+        Получение даты и времени для Date-Time-пикера
+        :type date: <class 'datetime.date'>
+        '''
+        print(date)
+        self.screen.ids.start_date.text = date.strftime("%d-%m-%Y") # str(date)
 
     def on_tab_switch(
             self, instance_tabs, instance_tab, instance_tab_label, tab_text
