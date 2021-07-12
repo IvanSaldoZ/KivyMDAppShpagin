@@ -76,7 +76,11 @@ Screen:
                         left_action_items: [['menu', lambda x: nav_drawer.set_state("open")]]
                         
                     MDTabs:
-                        id: tabs                                        
+                        id: tabs
+                        on_tab_switch: app.on_tab_switch(*args)      
+                        height: "48dp"
+                        tab_indicator_anim: False
+                        background_color: 0.1, 0.1, 0.1, 1                                                          
 
 
         MDNavigationDrawer:
@@ -160,6 +164,21 @@ class MortgageCalculatorApp(MDApp):
             self.root.ids.tabs.add_widget(
                 Tab(text=f"[ref={name_tab}][font={fonts[-1]['fn_regular']}]{md_icons[icon_name]}[/font][/ref] {name_tab}")
             )
+
+    def on_tab_switch(
+            self, instance_tabs, instance_tab, instance_tab_label, tab_text
+    ):
+        '''Called when switching tabs.
+
+        :type instance_tabs: <kivymd.uix.tab.MDTabs object>;
+        :param instance_tab: <__main__.Tab object>;
+        :param instance_tab_label: <kivymd.uix.tab.MDTabsLabel object>;
+        :param tab_text: text or name icon of tab;
+        '''
+
+        print('Tab clicked!!!', tab_text)
+
+
 
 
 class Tab(MDFloatLayout, MDTabsBase):
