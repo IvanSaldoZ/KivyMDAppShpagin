@@ -198,6 +198,14 @@ Screen:
                             name: 'tab2'
                             text: f"[size=20][font={fonts[-1]['fn_regular']}]{md_icons['table-large']}[/size][/font] Table"
                             
+                            BoxLayout:
+                                orientation: 'vertical'
+                                padding: "10dp" 
+                                
+                                ScrollView:
+                                
+                                    MDList:
+                                        id: table_list                            
 
                         Tab:
                             id: tab3
@@ -243,6 +251,36 @@ class DrawerList(ThemableBehavior, MDList):
                 break
         instance_item.text_color = self.theme_cls.primary_color
 
+
+class ItemTable(BoxLayout):
+    """
+    Виджет BoxTable (наследование) с уже встроенными параметрами - переменными
+    Используется для расчета ипотеки
+    """
+    num = StringProperty()
+    date = StringProperty()
+    payment = StringProperty()
+    interest = StringProperty()
+    principal = StringProperty()
+    debt = StringProperty()
+    color = ListProperty()
+
+
+# https://stackoverflow.com/questions/2249956/how-to-get-the-same-day-of-next-month-of-a-given-day-in-python-using-datetime
+def next_month_date(d):
+    """
+    Функция для расчета следующего дня месяца для расчета процентов по кредиту
+    :param d:
+    :return:
+    """
+    _year = d.year + (d.month // 12)
+    _month = 1 if (d.month // 12) else d.month + 1
+    next_month_len = calendar.monthrange(_year, _month)[1]
+    next_month = d
+    if d.day > next_month_len:
+        next_month = next_month.replace(day=next_month_len)
+    next_month = next_month.replace(year=_year, month=_month)
+    return next_month
 
 class MortgageCalculator(MDApp):
     """
@@ -379,6 +417,82 @@ class MortgageCalculator(MDApp):
         :return:
         """
         print("star clicked!")
+
+    def calc_table(self, *args):
+        print("button1 pressed")
+        start_date = self.screen.ids.start_date.text
+        loan = self.screen.ids.loan.text
+        months = self.screen.ids.months.text
+        interest = self.screen.ids.interest.text
+        payment_type = self.screen.ids.payment_type.text
+        print(start_date+" "+loan+" "+months+" "+interest+" "+payment_type)
+        # convert to date object, float, and so on
+        start_date = datetime.datetime.strptime(self.screen.ids.start_date.text, "%d-%m-%Y").date()
+        loan = float(loan)
+        months = int(months)
+        interest = float(interest)
+
+        #annuity payment
+        #https://temabiz.com/finterminy/ap-formula-i-raschet-annuitetnogo-platezha.html
+        percent = interest/100/12
+        monthly_payment = loan*(percent+percent/((1+percent)**months-1))
+        print(monthly_payment)
+
+        debt_end_month = loan
+        for i in range(0, months):
+            repayment_of_interest = debt_end_month*percent
+            repayment_of_loan_body = monthly_payment-repayment_of_interest
+            debt_end_month = debt_end_month-repayment_of_loan_body
+            print(monthly_payment, repayment_of_interest, repayment_of_loan_body, debt_end_month)
+
+        total_amount_of_payments = monthly_payment * months
+        overpayment_loan = total_amount_of_payments-loan
+        effective_interest_rate = ((total_amount_of_payments/loan-1)/(months/12))*100
+        print(total_amount_of_payments, overpayment_loan, effective_interest_rate)
+
+        # https://kivymd.readthedocs.io/en/latest/themes/color-definitions/
+        self.screen.ids.table_list.clear_widgets()
+        self.screen.ids.table_list.add_widget(
+            ItemTable(
+                color=(0.2, 0.2, 0.2, 0.5),
+                num="№",
+                date="Date",
+                payment="Payment",
+                interest="Interest",
+                principal="Principal",
+                debt="Debt",
+            )
+        )
+
+        debt_end_month = loan
+        for i in range(0, months):
+            row_color = (1, 1, 1, 1)
+            if (i % 2 != 0):
+                row_color = (0.2, 0.2, 0.2, 0.1)
+            repayment_of_interest = debt_end_month * percent
+            repayment_of_loan_body = monthly_payment - repayment_of_interest
+            debt_end_month = debt_end_month - repayment_of_loan_body
+
+            self.screen.ids.table_list.add_widget(
+                ItemTable(
+                    color=row_color,  # (0, 0, 0, 1),
+                    num=str(i + 1),
+                    date=start_date.strftime("%d-%m-%Y"),
+                    payment=str(round(monthly_payment, 2)),
+                    interest=str(round(repayment_of_interest, 2)),
+                    principal=str(round(repayment_of_loan_body, 2)),
+                    debt=str(round(debt_end_month, 2)),
+                )
+            )
+
+            # d = datetime.datetime.today()
+            # print(next_month_date(d))
+            # start_date = start_date + datetime.timedelta(days=30)
+            start_date = next_month_date(start_date)
+
+    pass
+
+
 
 
 class Tab(MDFloatLayout, MDTabsBase):
