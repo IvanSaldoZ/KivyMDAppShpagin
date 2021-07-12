@@ -1,10 +1,15 @@
 from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
+from kivymd.uix.floatlayout import MDFloatLayout
+from kivymd.uix.tab import MDTabsBase
 from kivy.properties import StringProperty, ListProperty
 
 from kivymd.app import MDApp
 from kivymd.theming import ThemableBehavior
 from kivymd.uix.list import OneLineIconListItem, MDList
+from kivymd.icon_definitions import md_icons
+
+from kivymd.font_definitions import fonts
 
 KV = '''
 # Menu item in the DrawerList list.
@@ -69,12 +74,9 @@ Screen:
                         title: "Mortgage Calculator"
                         elevation: 10
                         left_action_items: [['menu', lambda x: nav_drawer.set_state("open")]]
-
-                    Widget:
-                        MDTextField:
-                            hint_text: "Helper text on focus"
-                            helper_text: "This will disappear when you click off"
-                            helper_text_mode: "on_focus"
+                        
+                    MDTabs:
+                        id: tabs                                        
 
 
         MDNavigationDrawer:
@@ -108,9 +110,17 @@ class DrawerList(ThemableBehavior, MDList):
 
 class MortgageCalculatorApp(MDApp):
     def build(self):
+        """
+        Метод при билде приложения
+        :return:
+        """
         return Builder.load_string(KV)
 
     def on_start(self):
+        """
+        Метод при создании приложения
+        :return:
+        """
         icons_item = {
             "folder": "My files",
             "account-multiple": "Shared with me",
@@ -119,10 +129,27 @@ class MortgageCalculatorApp(MDApp):
             "checkbox-marked": "Shared with me",
             "upload": "Upload",
         }
+        # Левое меню
         for icon_name in icons_item.keys():
             self.root.ids.content_drawer.ids.md_list.add_widget(
                 ItemDrawer(icon=icon_name, text=icons_item[icon_name])
             )
+        # for name_tab in list(md_icons.keys())[15:30]:
+        #     self.root.ids.tabs.add_widget(Tab(icon=name_tab, title=name_tab))
+
+        # Закладки в центре
+        for icon_name, name_tab in icons_item.items():
+            self.root.ids.tabs.add_widget(
+                Tab(text=f"[ref={name_tab}][font={fonts[-1]['fn_regular']}]{md_icons[icon_name]}[/font][/ref] {name_tab}")
+            )
+
+
+class Tab(MDFloatLayout, MDTabsBase):
+    """
+    Список закладок (tabs)
+    https://kivymd.readthedocs.io/en/latest/components/tabs/
+    """
+    pass
 
 
 MortgageCalculatorApp().run()
