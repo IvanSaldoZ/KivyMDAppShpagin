@@ -41,13 +41,13 @@ KV = '''
             source: "data/logo/kivy-icon-256.png"
 
     MDLabel:
-        text: "KivyMD library"
+        text: app.title
         font_style: "Button"
         size_hint_y: None
         height: self.texture_size[1]
 
     MDLabel:
-        text: "kivydevelopment@gmail.com"
+        text: app.by_who
         font_style: "Caption"
         size_hint_y: None
         height: self.texture_size[1]
@@ -71,7 +71,7 @@ Screen:
                     orientation: 'vertical'
 
                     MDToolbar:
-                        title: "Mortgage Calculator"
+                        title: app.title
                         elevation: 10
                         left_action_items: [['menu', lambda x: nav_drawer.set_state("open")]]
                         
@@ -109,6 +109,15 @@ class DrawerList(ThemableBehavior, MDList):
 
 
 class MortgageCalculatorApp(MDApp):
+    """
+    Основной класс приложения
+    """
+
+    # Переменные, которые можно использовать в KV через вызов "app."
+    # (например, app.title, app.by_who и т.д.
+    title = "Mortgage Calculator"
+    by_who = 'by Ivan Saldikov'
+
     def build(self):
         """
         Метод при билде приложения

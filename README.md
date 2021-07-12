@@ -54,3 +54,9 @@ https://fonts.google.com/icons?selected=Material+Icons
 
 Парсер картинок всех компонентов:
 Папка /components
+
+### Считывание переменных из приложения
+https://www.youtube.com/watch?v=KLcHMJETg4A
+В KV-файле пишем "app.", + в основном классе приложения можно писать переменные,
+например "app.title", class MainApp(MDApp): ... title = 'Something'
+                
