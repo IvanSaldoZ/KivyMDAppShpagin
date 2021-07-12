@@ -7,7 +7,8 @@ kivy-deps.angle==0.3.0
 kivy-deps.glew==0.3.0
 kivy-deps.sdl2==0.3.1
 Kivy-Garden==0.1.4
-kivymd==0.104.2
+kivymd @ https://github.com/kivymd/KivyMD/archive/3274d62.zip
+lxml==4.6.3
 Pillow==8.3.0
 Pygments==2.9.0
 pypiwin32==223

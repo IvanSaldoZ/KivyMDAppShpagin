@@ -10,6 +10,7 @@ from kivymd.uix.list import OneLineIconListItem, MDList
 from kivymd.icon_definitions import md_icons
 
 from kivymd.uix.menu import MDDropdownMenu
+from kivy.clock import Clock
 
 from kivymd.font_definitions import fonts
 
@@ -239,7 +240,7 @@ class DrawerList(ThemableBehavior, MDList):
         instance_item.text_color = self.theme_cls.primary_color
 
 
-class MortgageCalculatorApp(MDApp):
+class MortgageCalculator(MDApp):
     """
     Основной класс приложения
     """
@@ -249,12 +250,54 @@ class MortgageCalculatorApp(MDApp):
     title = "Mortgage Calculator"
     by_who = 'by Ivan Saldikov'
 
+    def __init__(self, **kwargs):
+        """
+        Инициализация класса
+        :param kwargs:
+        """
+        super().__init__(**kwargs)
+        self.screen = Builder.load_string(KV)
+        #https://kivymd.readthedocs.io/en/latest/components/menu/?highlight=MDDropDownItem#center-position
+        #menu_items = [{"icon": "git", "text": f"Item {i}"} for i in range(5)]
+        # Составляем список типа платежа: дифференцированный или аннуитентный
+        menu_items = [
+            {"icon": "format-text-rotation-angle-up", "text": "annuity"},
+            {"icon": "format-text-rotation-angle-down", "text": "differentiated"}
+        ]
+        # Добавляем в класс выпадающее меню, которое содержит список типа платежа
+        # id: payment_type присвоен выше в KV-строке
+        self.menu = MDDropdownMenu(
+            caller=self.screen.ids.payment_type,
+            items=menu_items,
+            position="auto",
+            width_mult=4,
+        )
+        # Связываем событие нажатия на меню выбора типа платежа с определенным методом класса
+        self.menu.bind(on_release=self.set_item)
+
+    def set_item(self, instance_menu, instance_menu_item):
+        """
+        Назначаем текст после выбора меню выбора типа платежа: аннуитентный или обычный
+        :param instance_menu:
+        :param instance_menu_item:
+        :return:
+        """
+
+        def set_item(interval):
+            self.screen.ids.payment_type.text = instance_menu_item.text
+            # dismiss закрывает меню
+            instance_menu.dismiss()
+
+        Clock.schedule_once(set_item, 0.5)
+
     def build(self):
         """
         Метод при билде приложения
         :return:
         """
-        return Builder.load_string(KV)
+        self.theme_cls.theme_style = "Light"  # "Dark"  # "Light"
+        # return Builder.load_string(KV)
+        return self.screen
 
     def on_start(self):
         """
@@ -319,4 +362,4 @@ class Tab(MDFloatLayout, MDTabsBase):
     pass
 
 
-MortgageCalculatorApp().run()
+MortgageCalculator().run()

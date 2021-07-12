@@ -66,3 +66,11 @@ https://www.youtube.com/watch?v=KLcHMJETg4A
 Тот паттерн, который я использовал для дизайна на сайте KivyDesigner, хранится 
 в файле `kivy_designer_pattern.py`
                 
+### Если не работает меню MDMenu
+
+При использовании последней версии KivyMD меню может не работать.
+Но меню при этом работает на старой версии KivyMD - ее и нужно использовать, выполнив
+следующие команды по очереди перед запуском приложения
+#pip install kivy
+#pip install kivymd
+#pip install https://github.com/kivymd/KivyMD/archive/3274d62.zip
