@@ -59,4 +59,10 @@ https://fonts.google.com/icons?selected=Material+Icons
 https://www.youtube.com/watch?v=KLcHMJETg4A
 В KV-файле пишем "app.", + в основном классе приложения можно писать переменные,
 например "app.title", class MainApp(MDApp): ... title = 'Something'
+
+
+### Kivy Designer Pattern
+
+Тот паттерн, который я использовал для дизайна на сайте KivyDesigner, хранится 
+в файле `kivy_designer_pattern.py`
                 
