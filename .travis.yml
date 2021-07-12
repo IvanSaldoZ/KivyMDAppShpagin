@@ -6,7 +6,7 @@ python:
   - 3.9
 
 install:
-  - export MOBILE_APP_VERSION=0.54
+  - export MOBILE_APP_VERSION=0.55
   - sudo apt -y install python3-distutils
   - sudo apt -y install python3-pip
   - sudo apt install -y git
